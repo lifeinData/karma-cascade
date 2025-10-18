@@ -17,12 +17,17 @@ export const hydrateBoard = (schema: BoardSchema, numColors: number): Gem[][] =>
 
   for (let row = 0; row < schema.length; row++) {
     const boardRow: Gem[] = [];
-    for (let col = 0; col < schema[row].length; col++) {
-      const schemaColor = schema[row][col];
+    const schemaRow = schema[row];
+    if (!schemaRow) continue;
+    
+    for (let col = 0; col < schemaRow.length; col++) {
+      const schemaColor = schemaRow[col];
+      if (!schemaColor) continue;
+      
       const actualColor = COLOR_MAP[schemaColor] || 'red'; // Fallback to red
 
       const gem: Gem = {
-        id: `gem-${row}-${col}`,
+        id: crypto.randomUUID(),
         color: actualColor,
         row: row,
         col: col,

@@ -1,12 +1,12 @@
 ## Karma Cascade - Advanced Bejeweled Game for Reddit
 
-A sophisticated match-3 puzzle game with an intelligent level generator, built with React and designed for Reddit's Devvit platform. This game brings classic gem-matching gameplay directly to Reddit, featuring strategic gem swapping, advanced board generation, and smooth visual feedback - all playable without leaving your favorite social platform.
+A sophisticated match-3 puzzle game with an intelligent level generator and revolutionary gravity cascade system, built with React and designed for Reddit's Devvit platform. This game brings classic gem-matching gameplay directly to Reddit, featuring strategic gem swapping, advanced board generation, realistic physics simulation, and smooth visual feedback - all playable without leaving your favorite social platform.
 
 ### What This Game Is
 
 Karma Cascade is a modern implementation of the classic Bejeweled match-3 puzzle game, designed specifically for Reddit's social gaming ecosystem. Players interact with fully customizable grids of colorful gems (red, blue, green, yellow, purple, orange, cyan), strategically swapping adjacent pieces to create matches of three or more identical gems using an advanced **connected component matching system**. 
 
-Unlike traditional match-3 games that only detect straight lines, Karma Cascade uses sophisticated flood-fill algorithms to find connected groups of identical gems in any shape - including L-shapes, T-shapes, and irregular clusters. When matches are formed, the gems are automatically marked with a distinctive gray "dulled" appearance to show they've been cleared, and these dulled gems are intelligently excluded from future matches to prevent infinite loops.
+Unlike traditional match-3 games that only detect straight lines, Karma Cascade uses sophisticated flood-fill algorithms to find connected groups of identical gems in any shape - including L-shapes, T-shapes, and irregular clusters. When matches are formed, the gems **completely disappear** from the board, triggering a realistic **gravity cascade system** where remaining gems fall down to fill empty spaces, new gems appear at the top, and the process continues until no more matches can be made.
 
 The game features an intuitive two-click interaction system: first click selects a gem (highlighted with yellow border and scaling effects), second click attempts to swap with an adjacent gem. Only moves that create valid matches are accepted, ensuring strategic gameplay that rewards planning and pattern recognition. The revolutionary multi-algorithm level generator creates perfectly balanced boards with real-time configurable parameters - ensuring no initial matches while mathematically guaranteeing a minimum number of possible moves.
 
@@ -16,8 +16,14 @@ Built with modern React architecture, the game uses a clean component hierarchy 
 
 **🧠 Revolutionary Match Detection System**
 - **Connected Component Matching**: Uses advanced flood-fill algorithms to detect matches in any connected shape (L-shapes, T-shapes, clusters) - not just straight lines like traditional match-3 games
-- **Smart Gray Gem Logic**: Matched gems turn gray and are intelligently excluded from future matches, preventing infinite loops while maintaining visual feedback
+- **Complete Gem Disappearance**: Matched gems completely vanish from the board (no gray placeholders), creating realistic empty spaces for gravity physics
 - **Generic Color Extraction**: Unified match detection system works with both string schemas (for generation) and full Gem objects (for gameplay) using polymorphic color extractors
+
+**⚡ Revolutionary Gravity Cascade System**
+- **Realistic Physics Simulation**: When gems are matched and removed, remaining gems fall down due to gravity, filling empty spaces naturally
+- **Automatic Refill Mechanism**: New random gems appear at the top to fill holes left by falling gems, maintaining full board coverage
+- **Infinite Cascade Logic**: The system continues processing gravity → new gems → match detection → removal until the board reaches a stable state with no matches
+- **Six-Phase Cascade Pipeline**: Remove matches → Apply gravity → Fill top holes → Check for new matches → Repeat until stable → Final board state
 
 **🎯 Multi-Algorithm Level Generator**
 - **Four-Tier Generation System**: Pattern-Based (fastest), Constraint-Based (efficient), Backtracking (most reliable), Random Fallback - automatically selects optimal approach
@@ -27,20 +33,20 @@ Built with modern React architecture, the game uses a clean component hierarchy 
 
 **🎮 Advanced Game Mechanics**
 - **Strategic Move Validation**: Only swaps that create connected component matches are accepted - encourages planning over random clicking
-- **Live Parameter Control**: Real-time adjustment of grid size (3-15), colors (2-6), and minimum moves (1-20) with instant regeneration
+- **Cascading Chain Reactions**: Single moves can trigger multiple cascade steps, creating satisfying chain reactions and combo opportunities
+- **Live Parameter Control**: Real-time adjustment of grid size (3-15), colors (2-7), and minimum moves (1-20) with instant regeneration
 - **Intelligent Selection System**: Click to select with visual feedback, click adjacent to swap, click same gem to deselect, click distant gem to reselect
-- **Performance-Optimized Validation**: Early-exit algorithms stop checking as soon as requirements are met for maximum efficiency
 
 **🏗️ Modern Technical Architecture**
 - **Type-Safe Development**: Full TypeScript integration with proper interfaces for all game components and level generation systems
+- **Decoupled Game Logic**: Gravity cascade system separated from UI rendering for optimal performance and maintainability
 - **Component-Based Design**: Clean React hierarchy (App → Game → Board → Gem) with proper separation of concerns
 - **Responsive CSS Grid**: Dynamic layout that adapts to any board size with touch-optimized gem sizing
-- **Comprehensive Error Handling**: Automatic fallback systems, retry logic, and graceful degradation for maximum reliability
 
 **📱 Reddit-Native Experience**
 - **Seamless Integration**: Built specifically for Reddit's Devvit platform - plays directly in posts without external apps or downloads
 - **Cross-Platform Optimization**: Mobile-first responsive design that works perfectly on desktop and mobile browsers
-- **Developer-Friendly Debugging**: Extensive console logging for board generation, move validation, and match detection
+- **Developer-Friendly Debugging**: Extensive console logging for board generation, move validation, match detection, and gravity cascades
 - **Social Gaming Ready**: Designed for Reddit's social ecosystem with potential for leaderboards and community features
 
 ### Current Implementation Status
@@ -57,37 +63,39 @@ Built with modern React architecture, the game uses a clean component hierarchy 
 - **Comprehensive Click Handling**: Advanced event handling and state management for all player interactions with proper validation
 - **Rich Visual Feedback System**: Selected gems show bright yellow 3px borders, glow shadows, 1.1x scaling, plus 1.05x hover effects on all gems
 - **Adjacent Gem Swapping**: Complete swap mechanics for neighboring gems (horizontal/vertical only) with instant color swapping
-- **Robust Match Detection Algorithm**: Full implementation detecting 3+ consecutive gems horizontally and vertically with proper edge case handling
-- **Strategic Move Validation**: Only valid moves that create matches are accepted - invalid moves rejected with immediate console feedback
-- **Automatic Match Clearing**: Matched gems instantly turn gray ("dulled") to show they've been cleared from play
-- **Complete Bejeweled Game Loop**: Fully playable mechanics from board generation → selection → swapping → matching → clearing
+- **Revolutionary Connected Component Matching**: Advanced flood-fill algorithm detecting matches in any connected shape (L-shapes, T-shapes, clusters) - not just straight lines
+- **Strategic Move Validation**: Only valid moves that create connected component matches are accepted - invalid moves rejected with immediate console feedback
+- **Complete Gravity Cascade System**: Matched gems disappear completely → remaining gems fall down → new gems fill top holes → cascade continues until stable
+- **Infinite Cascade Logic**: Automatic chain reactions where falling gems and new gems can create additional matches, continuing until board stabilizes
+- **Complete Bejeweled Game Loop**: Fully playable mechanics from board generation → selection → swapping → matching → gravity cascade → refill → stabilization
 
 **✅ Advanced Technical Features:**
 - **Revolutionary Multi-Algorithm Generation Pipeline**: Four distinct generation approaches (Pattern-Based, Constraint-Based, Backtracking, Random Fallback) with automatic algorithm selection for optimal performance and reliability
 - **Performance-Optimized Validation**: Early-exit algorithms - hasInitialMatches stops on first match found, hasMinimumMoves returns as soon as minimum count reached
 - **Mathematical Playability Guarantee**: Every generated board mathematically ensures no initial matches while guaranteeing your specified minimum possible moves
-- **Smart Anti-Loop Architecture**: Intelligent match detection that excludes dulled (gray) gems from creating new matches, preventing infinite useEffect loops
-- **Comprehensive Debug Logging**: Detailed console output tracking board generation attempts, algorithm selection, gem selections, swap attempts, match validation, and complete board state changes
+- **Advanced Gravity Physics Engine**: Six-phase cascade system (Remove → Gravity → Fill → Check → Repeat → Stabilize) with complete gem disappearance and realistic falling mechanics
+- **Comprehensive Debug Logging**: Detailed console output tracking board generation, algorithm selection, gem selections, swap attempts, match validation, gravity cascades, and complete board state changes
 - **Intelligent Fallback System**: Advanced error handling with automatic algorithm fallback - if one approach fails, automatically tries the next most reliable method
 - **Three-Phase Board Processing**: Lightweight schema generation → validation → hydration → cleanup with automatic retry on any phase failure
+- **Decoupled Game Logic**: Gravity cascade system completely separated from UI rendering for optimal performance and future animation integration
 - **Smooth CSS Animations**: Professional hover effects with 1.05x scale on hover, 1.1x scale on selection, plus smooth transitions for all interactions
-- **Type-Safe Development**: Full TypeScript integration with proper interfaces for Gem, BoardSchema, GeneratorConfig, and all component props
+- **Type-Safe Development**: Full TypeScript integration with proper interfaces for Gem, BoardSchema, GeneratorConfig, gravity cascade functions, and all component props
 
 **🔧 Current Technical Status:**
-- **Core Gameplay**: 100% functional and playable with all major Bejeweled features fully implemented and tested
-- **Performance**: Highly optimized for boards up to 15x15 with efficient validation algorithms and early-exit optimizations
+- **Core Gameplay**: 100% functional and playable with all major Bejeweled features plus advanced gravity cascade system fully implemented and tested
+- **Gravity Physics**: Complete gravity cascade system with gem removal, falling mechanics, top refill, and infinite cascade loops until board stabilization
+- **Performance**: Highly optimized for boards up to 15x15 with efficient validation algorithms, early-exit optimizations, and fast cascade processing
 - **Cross-Platform**: Responsive design works perfectly on desktop and mobile with touch-optimized controls
-- **Default Configuration**: Now defaults to 8x8 grid, 7 colors, 5 minimum moves for enhanced gameplay complexity
-- **TypeScript Integration**: Some minor type safety improvements available for enhanced production deployment
+- **Default Configuration**: Now defaults to 8x8 grid, 7 colors, 5 minimum moves for enhanced gameplay complexity with satisfying cascade opportunities
+- **TypeScript Integration**: Full type safety with comprehensive interfaces for all game logic, gravity system, and component interactions
 
 **🚧 Future Enhancement Opportunities:**
-- **Scoring System**: Point tracking with combo multipliers and high score persistence
-- **Physics Engine**: Gem falling/gravity mechanics after matches with smooth animations
-- **Board Refill**: New gem generation to fill empty spaces after clearing matches
-- **Power-Up System**: Special gems (bombs, line clearers, color changers) and combo effects
-- **Audio Experience**: Sound effects for selections, swaps, matches, and background music
-- **Social Features**: Reddit user leaderboards, achievements, and community challenges
-- **Advanced Animations**: Particle effects, gem explosions, and enhanced visual polish
+- **Scoring System**: Point tracking with cascade multipliers, combo bonuses, and high score persistence
+- **Visual Animations**: Smooth gem falling animations, disappearing effects, and new gem appearance transitions
+- **Power-Up System**: Special gems (bombs, line clearers, color changers) and combo effects that integrate with gravity system
+- **Audio Experience**: Sound effects for selections, swaps, matches, cascades, and background music
+- **Social Features**: Reddit user leaderboards, achievements, cascade records, and community challenges
+- **Advanced Visual Effects**: Particle effects, gem explosions, cascade trails, and enhanced visual polish
 
 ### Current Game Architecture
 
@@ -147,10 +155,21 @@ Create matches of three or more identical gems by swapping adjacent gems. Karma 
 - The game validates if this swap creates any connected component matches
 - Only valid moves that create matches are accepted
 
-**Step 3: See the Results**
-- **Valid Move**: Gems swap colors instantly, all connected components of 3+ matching gems turn gray
+**Step 3: Watch the Gravity Cascade**
+- **Valid Move**: Gems swap colors instantly, triggering the revolutionary cascade system:
+  1. **Matched gems disappear completely** (no gray placeholders - they vanish!)
+  2. **Remaining gems fall down** due to gravity, filling empty spaces naturally
+  3. **New gems appear at the top** to fill holes left by falling gems
+  4. **System checks for new matches** created by fallen or new gems
+  5. **Cascade continues** until the board reaches a stable state with no matches
 - **Invalid Move**: Nothing happens, board stays unchanged, try a different swap
 - Selection automatically clears after any swap attempt
+
+**Step 4: Enjoy Chain Reactions**
+- Single moves can trigger **multiple cascade steps**
+- Watch as falling gems create new matches, which disappear and cause more gems to fall
+- The cascade continues automatically until no more matches can be made
+- Final board state shows the complete result of your strategic move
 
 #### 🧩 Advanced Connected Component Matching
 
@@ -166,9 +185,24 @@ Unlike traditional match-3 games that only find straight lines, Karma Cascade de
 - **Complex Patterns**: Any shape where gems touch up/down/left/right
 
 **Strategic Implications:**
-- **Bigger Matches**: Create large connected clusters for more impressive clears
-- **Shape Planning**: Think beyond straight lines - visualize connected regions
+- **Bigger Matches**: Create large connected clusters for more impressive clears and longer cascades
+- **Shape Planning**: Think beyond straight lines - visualize connected regions that will disappear together
 - **Multiple Components**: One swap can create several separate connected groups simultaneously
+- **Cascade Opportunities**: Consider how gems will fall after matches disappear - plan for chain reactions
+
+#### ⚡ Mastering the Gravity Cascade System
+
+**Understanding Cascade Physics:**
+- **Complete Disappearance**: Matched gems vanish entirely, creating holes for gravity to fill
+- **Vertical Falling**: Gems fall straight down in their columns (no diagonal movement)
+- **Top Refill**: New random gems always appear at the top to maintain full board coverage
+- **Infinite Loops**: Cascades continue until no more matches exist anywhere on the board
+
+**Advanced Cascade Strategy:**
+- **Setup Cascades**: Look for moves that will create matches after gems fall
+- **Multi-Level Thinking**: Consider what happens 2-3 cascade steps ahead
+- **Color Distribution**: With fewer colors, expect longer cascades; with more colors, focus on immediate matches
+- **Top-Heavy Boards**: Matches near the top create more dramatic cascades as more gems fall
 
 #### 🎯 Game Controls & Interface
 

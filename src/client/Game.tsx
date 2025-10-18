@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Board from './Board.js';
 import { generateValidBoard, type Gem, type GeneratorConfig } from './levelGeneration';
 import { findGemMatches } from './levelGeneration/matchDetection';
+import { processGravityCascade } from './gameLogic';
 
 const Game = () => {
   const [board, setBoard] = useState<Gem[][]>([]);
@@ -62,23 +63,20 @@ const Game = () => {
     console.log('🔍 Matches found:', matches.size > 0 ? Array.from(matches) : 'None');
 
     if (matches.size > 0) {
-      // Create a copy of the board and change matched gems to "dull" color
-      const newBoard = board.map((boardRow) => boardRow.map((gem) => ({ ...gem })));
+      // Create generator configuration for the cascade
+      const config: GeneratorConfig = {
+        gridSize,
+        numColors,
+        minMoves,
+      };
 
-      // Change matched gems to dull color
-      matches.forEach((matchKey) => {
-        const parts = matchKey.split('-');
-        const row = Number(parts[0]);
-        const col = Number(parts[1]);
-        if (!isNaN(row) && !isNaN(col) && newBoard[row] && newBoard[row][col]) {
-          newBoard[row][col].color = 'gray'; // Using gray as the "dull" color
-        }
-      });
-
-      console.log('✨ Dulling matched gems:', Array.from(matches));
-      setBoard(newBoard);
+      // Process the complete gravity cascade
+      const finalBoard = processGravityCascade(board, config);
+      
+      console.log('✨ Gravity cascade complete, updating board');
+      setBoard(finalBoard);
     }
-  }, [board]);
+  }, [board, gridSize, numColors, minMoves]);
 
   const isAdjacent = (
     gem1: { row: number; col: number },
