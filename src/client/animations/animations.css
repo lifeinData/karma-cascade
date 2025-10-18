@@ -1,0 +1,107 @@
+/* Gravity Animation System for Gems */
+
+/* Core gem styling and transitions */
+.gem {
+  position: absolute;
+  transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smooth gravity curve */
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Hide transparent placeholder gems */
+.gem[style*="background-color: transparent"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gem:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.gem.selected {
+  border-color: #ffff00;
+  border-width: 3px;
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+}
+
+/* Gravity falling animation for new gems */
+.gem-falling {
+  animation: gravity-fall 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes gravity-fall {
+  0% {
+    transform: translateY(-120px) scale(0.7);
+    opacity: 0.5;
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-20px) scale(0.9);
+  }
+  70% {
+    transform: translateY(10px) scale(1.05);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Appearing animation for new gems (after they fall) */
+.gem-appearing {
+  animation: gem-appear 0.3s ease-out forwards;
+}
+
+@keyframes gem-appear {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Bouncy effect when gems land */
+.gem-landing {
+  animation: gem-land-bounce 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+@keyframes gem-land-bounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Staggered animation delays for cascade effect */
+.gem-cascade-delay-1 { animation-delay: 0.1s; }
+.gem-cascade-delay-2 { animation-delay: 0.2s; }
+.gem-cascade-delay-3 { animation-delay: 0.3s; }
+.gem-cascade-delay-4 { animation-delay: 0.4s; }
+.gem-cascade-delay-5 { animation-delay: 0.5s; }
+
+/* Pulse effect for potential matches */
+.gem-highlight {
+  animation: gem-pulse 1s ease-in-out infinite;
+}
+
+@keyframes gem-pulse {
+  0%, 100% {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+  }
+}

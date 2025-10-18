@@ -1,4 +1,6 @@
 import './index.css';
+import './animations/animations.css';
+import './animations/matchEffects.css';
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';

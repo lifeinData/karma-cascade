@@ -7,6 +7,9 @@ export interface Gem {
   color: string;
   row: number;
   col: number;
+  isNew?: boolean;
+  isMatched?: boolean;
+  animationState?: 'normal' | 'disappearing' | 'falling' | 'appearing' | 'landing';
 }
 
 // Hydration function: Convert schema to full React state

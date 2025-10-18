@@ -1,0 +1,98 @@
+/* Match Effects - Sparkles and Explosions */
+
+.match-effects-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.sparkle-effect {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sparkle {
+  position: absolute;
+  background: radial-gradient(circle, #fff 0%, #ffeb3b  30%, transparent 70%);
+  border-radius: 50%;
+  animation: sparkle-burst 0.6s ease-out forwards;
+  pointer-events: none;
+}
+
+.sparkle-1 {
+  width: 8px;
+  height: 8px;
+  animation-delay: 0ms;
+  transform: translate(-10px, -10px);
+}
+
+.sparkle-2 {
+  width: 6px;
+  height: 6px;
+  animation-delay: 100ms;
+  transform: translate(12px, -8px);
+}
+
+.sparkle-3 {
+  width: 10px;
+  height: 10px;
+  animation-delay: 50ms;
+  transform: translate(-8px, 12px);
+}
+
+.sparkle-4 {
+  width: 4px;
+  height: 4px;
+  animation-delay: 150ms;
+  transform: translate(8px, 10px);
+}
+
+.sparkle-5 {
+  width: 7px;
+  height: 7px;
+  animation-delay: 75ms;
+  transform: translate(0px, -15px);
+}
+
+@keyframes sparkle-burst {
+  0% {
+    opacity: 0;
+    transform: scale(0) translate(var(--start-x, 0), var(--start-y, 0));
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1.2) translate(var(--start-x, 0), var(--start-y, 0));
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3) translate(calc(var(--start-x, 0) * 2), calc(var(--start-y, 0) * 2));
+  }
+}
+
+/* Gem disappearing animation with sparkles */
+.gem-disappearing {
+  animation: gem-disappear-with-sparkles 0.5s ease-out forwards;
+}
+
+@keyframes gem-disappear-with-sparkles {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 235, 59, 0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+    box-shadow: 0 0 30px rgba(255, 235, 59, 0.4);
+  }
+}

@@ -100,7 +100,7 @@ export const fillTopHoles = (board: (Gem | null)[][], config: GeneratorConfig): 
 
     console.log(`  🕳️ Column ${col}: ${holesAtTop} holes at top`);
 
-    // Fill holes at top with new gems
+    // Fill holes at top with new gems (marked as new for animation)
     for (let row = 0; row < holesAtTop; row++) {
       const randomColorIndex = Math.floor(Math.random() * numColors);
       const colorLetter = colorLetters[randomColorIndex];
@@ -112,7 +112,9 @@ export const fillTopHoles = (board: (Gem | null)[][], config: GeneratorConfig): 
         id: crypto.randomUUID(),
         color: newColor,
         row: row,
-        col: col
+        col: col,
+        isNew: true, // Mark as new for falling animation
+        animationState: 'falling'
       };
       
       const targetRow = newBoard[row];
@@ -122,7 +124,7 @@ export const fillTopHoles = (board: (Gem | null)[][], config: GeneratorConfig): 
       }
     }
 
-    // Copy existing gems
+    // Copy existing gems (reset animation states)
     for (let row = holesAtTop; row < gridSize; row++) {
       const boardRow = board[row];
       if (boardRow) {
@@ -130,7 +132,12 @@ export const fillTopHoles = (board: (Gem | null)[][], config: GeneratorConfig): 
         if (gem) {
           const targetRow = newBoard[row];
           if (targetRow) {
-            targetRow[col] = { ...gem };
+            targetRow[col] = { 
+              ...gem, 
+              isNew: false,
+              isMatched: false,
+              animationState: 'normal'
+            };
           }
         }
       }
