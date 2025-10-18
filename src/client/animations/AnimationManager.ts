@@ -18,7 +18,9 @@ export class AnimationManager {
   // Start match disappearing animation with sparkles
   startMatchAnimation(matches: Set<string>, onComplete: () => void): void {
     const positions = Array.from(matches).map(matchKey => {
-      const [row, col] = matchKey.split('-').map(Number);
+      const parts = matchKey.split('-');
+      const row = parseInt(parts[0] || '0', 10);
+      const col = parseInt(parts[1] || '0', 10);
       return { row, col };
     });
 

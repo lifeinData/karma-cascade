@@ -161,8 +161,9 @@ export const generateBacktrackingBoard = (config: GeneratorConfig): BoardSchema 
     }
 
     // Backtrack
-    if (schema[row] && schema[row][col] !== undefined) {
-      schema[row][col] = '';
+    const currentRow = schema[row];
+    if (currentRow && currentRow[col] !== undefined) {
+      currentRow[col] = '';
     }
     return false;
   };
@@ -182,7 +183,9 @@ const wouldCreateMatchAtPosition = (
   col: number,
   gridSize: number
 ): boolean => {
-  const color = schema[row][col];
+  const schemaRow = schema[row];
+  if (!schemaRow) return false;
+  const color = schemaRow[col];
   if (!color) return false;
 
   // Quick check for immediate matches (3 in a row/column)
@@ -198,9 +201,17 @@ const wouldCreateMatchAtPosition = (
   // Vertical check
   let vCount = 1;
   // Count up
-  for (let r = row - 1; r >= 0 && schema[r] && schema[r][col] === color; r--) vCount++;
+  for (let r = row - 1; r >= 0; r--) {
+    const checkRow = schema[r];
+    if (!checkRow || checkRow[col] !== color) break;
+    vCount++;
+  }
   // Count down
-  for (let r = row + 1; r < gridSize && schema[r] && schema[r][col] === color; r++) vCount++;
+  for (let r = row + 1; r < gridSize; r++) {
+    const checkRow = schema[r];
+    if (!checkRow || checkRow[col] !== color) break;
+    vCount++;
+  }
   if (vCount >= 3) return true;
 
   return false;

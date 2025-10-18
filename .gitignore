@@ -13,3 +13,13 @@ dist
 .git
 .cursor
 .vscode
+gravity-cascade-flowchart.html
+animation-manager.html
+board-rendering.html
+cascade-system.html
+enhanced-gravity-flowchart.html
+gravity-docs-index.html
+gravity-system.html
+match-detection.html
+working-gravity-flowchart.html
+src/client/GRAVITY_SYSTEM_FLOW.md
