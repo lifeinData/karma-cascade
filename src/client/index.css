@@ -1,39 +1,268 @@
 @import 'tailwindcss';
-/* Game Styles */
-.game-container {
+
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* Prevent scrolling */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Start Screen Styles */
+.start-screen {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+}
+
+.start-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  gap: 2rem;
+  padding: 2rem;
 }
 
-.game-container h1 {
-  margin-bottom: 20px;
-  font-size: 2rem;
+.game-title {
+  font-size: clamp(2rem, 8vw, 4rem);
   font-weight: bold;
-  color: #333;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 2px;
+}
+
+.game-subtitle {
+  font-size: clamp(1rem, 4vw, 1.5rem);
+  margin: 0;
+  opacity: 0.9;
+  max-width: 400px;
+}
+
+.blitz-button {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: clamp(250px, 60vw, 400px);
+  height: clamp(80px, 20vw, 120px);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  font-size: clamp(1rem, 4vw, 1.5rem);
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  background-color: transparent;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.blitz-button:hover {
+  transform: scale(1.05);
+}
+
+.blitz-button:active {
+  transform: scale(0.95);
+}
+
+/* Game Styles */
+.game-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .board {
   /* Grid properties are now set dynamically via inline styles */
+  touch-action: manipulation;
+  /* Optimize for touch */
 }
 
 .gem {
-  width: 40px;
-  height: 40px;
-  border-radius: 6px;
+  position: absolute;
+  border-radius: 8px;
   border: 2px solid #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  transition: transform 0.1s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  
+  /* MAXIMUM MOBILE TOUCH SENSITIVITY */
+  touch-action: none; /* Prevent all default touch behaviors */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none; /* Prevent iOS callout */
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight */
+  
+  /* Ensure borders don't reduce touch area */
+  box-sizing: border-box;
+  
+  /* Larger touch target for mobile */
+  min-width: 45px;
+  min-height: 45px;
+  
+  /* Ensure gems are above other elements for touch */
+  z-index: 10;
+  
+  /* Make the entire gem area responsive to touch */
+  pointer-events: auto;
 }
 
 .gem:hover {
-  transform: scale(1.05);
+  transform: scale(1.08);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.gem:active {
+  transform: scale(0.92);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile-specific improvements - MAXIMUM SENSITIVITY */
+@media (max-width: 900px) {
+  .gem {
+    /* Larger touch targets on mobile */
+    min-width: 50px;
+    min-height: 50px;
+    /* Faster feedback on mobile */
+    transition: transform 0.05s ease, box-shadow 0.05s ease;
+    /* Ensure maximum touch responsiveness */
+    touch-action: manipulation;
+    /* Add slight padding to increase touch area without changing visual */
+    padding: 2px;
+    margin: -2px; /* Offset the padding */
+  }
+  
+  .gem:active {
+    /* Immediate visual feedback on mobile */
+    transform: scale(0.85);
+  }
+  
+  /* Ensure touch events work on the entire gem */
+  .gem * {
+    pointer-events: none; /* Prevent child elements from blocking touch */
+  }
+}
+
+/* Rainbow shimmer animation */
+@keyframes rainbow-shimmer {
+  0% {
+    border-color: #ff0040;
+    box-shadow: inset 0 0 8px rgba(255, 0, 64, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  16.66% {
+    border-color: #ff8000;
+    box-shadow: inset 0 0 8px rgba(255, 128, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  33.33% {
+    border-color: #ffff00;
+    box-shadow: inset 0 0 8px rgba(255, 255, 0, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  50% {
+    border-color: #00ff40;
+    box-shadow: inset 0 0 8px rgba(0, 255, 64, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  66.66% {
+    border-color: #0080ff;
+    box-shadow: inset 0 0 8px rgba(0, 128, 255, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  83.33% {
+    border-color: #8040ff;
+    box-shadow: inset 0 0 8px rgba(128, 64, 255, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  100% {
+    border-color: #ff0040;
+    box-shadow: inset 0 0 8px rgba(255, 0, 64, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
 }
 
 .gem.selected {
-  border: 3px solid #ffff00;
-  box-shadow: 0 0 10px rgba(255, 255, 0, 0.6);
-  transform: scale(1.1);
+  border: 4px solid #ff0040;
+  animation: rainbow-shimmer 1.2s linear infinite;
+  /* NO transform scale - keep gem same size */
+  z-index: 10;
+}
+
+/* Mobile optimizations */
+@media (max-width: 900px) {
+  .game-container {
+    padding: 5px;
+  }
+
+  .gem {
+    border-width: 2px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    /* Larger touch targets on mobile */
+    min-width: 45px;
+    min-height: 45px;
+  }
+
+  .gem:active {
+    transform: scale(0.88);
+  }
+
+  .gem.selected {
+    border-width: 4px;
+    /* NO transform scale - keep gem same size on mobile too */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .gem:hover {
+    /* Remove hover effects on mobile to prevent sticky hover states */
+    transform: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Touch-specific improvements */
+@media (hover: none) and (pointer: coarse) {
+  .gem:hover {
+    transform: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .gem:active {
+    transform: scale(0.85);
+    transition: transform 0.1s ease;
+  }
+}
+
+/* Prevent text selection on mobile */
+.game-container,
+.start-screen {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
