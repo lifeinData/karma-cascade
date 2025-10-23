@@ -2,10 +2,9 @@ import { useState, useEffect } from 'react';
 import Board from './Board.js';
 import { generateValidBoard, type Gem, type GeneratorConfig } from './levelGeneration';
 import { findGemMatches } from './levelGeneration/matchDetection';
-import { removeMatchedGems, applyGravity, fillTopHoles } from './gameLogic';
-import { animationManager } from './animations/AnimationManager';
+import { startCascade, validateCascadePrerequisites } from './gameMechanics/cascade';
 
-const Game = () => {
+const BlitzGame = () => {
   const [board, setBoard] = useState<Gem[][]>([]);
   const [selectedGem, setSelectedGem] = useState<{ row: number; col: number } | null>(null);
 
@@ -55,123 +54,39 @@ const Game = () => {
   // State to prevent cascade loops
   const [isProcessingCascade, setIsProcessingCascade] = useState(false);
 
-  // Step-by-step cascade system
-  const processStepByCascade = (
+  /**
+   * Initiates cascade processing using the new modular cascade system
+   * 
+   * This replaces the old processStepByCascade function with a cleaner,
+   * more maintainable approach that separates concerns and is easier to test.
+   * 
+   * @param currentBoard - The board state to process
+   * @param step - The type of cascade step to execute
+   */
+  const initiateCascade = (
     currentBoard: Gem[][],
     step: 'initial' | 'gravity' | 'newGems' = 'initial'
   ) => {
+    console.log(`🎭 Initiating cascade system for step: ${step}`);
+    
+    // Create generator configuration
     const config: GeneratorConfig = { gridSize, numColors, minMoves };
-
-    console.log(`🔄 Processing cascade step: ${step}`);
-
-    const matches = findMatches(currentBoard);
-    console.log('🔍 Matches found:', matches.size > 0 ? Array.from(matches) : 'None');
-
-    if (matches.size > 0) {
-      // Mark matched gems for disappearing animation
-      const boardWithMatchedGems = currentBoard.map((row) =>
-        row.map((gem) => {
-          const gemKey = `${gem.row}-${gem.col}`;
-          if (matches.has(gemKey)) {
-            return { ...gem, isMatched: true, animationState: 'disappearing' as const };
-          }
-          return { ...gem, isMatched: false, animationState: 'normal' as const };
-        })
-      );
-
-      setBoard(boardWithMatchedGems);
-
-      // Start match animation with sparkles
-      animationManager.startMatchAnimation(matches, () => {
-        // Remove matched gems and apply gravity
-        const cleanBoard = currentBoard.map((row) =>
-          row.map((gem) => ({ id: gem.id, color: gem.color, row: gem.row, col: gem.col }))
-        );
-
-        const boardAfterRemoval = removeMatchedGems(cleanBoard, matches);
-        const boardAfterGravity = applyGravity(boardAfterRemoval);
-
-        // Immediately fill holes to get a complete board
-        const completeBoard = fillTopHoles(boardAfterGravity, config);
-
-        // Create two versions: one for gravity match checking, one for display
-        const gravityCheckBoard = completeBoard.map((row) =>
-          row.map((gem) => ({
-            ...gem,
-            isNew: false, // Ignore new gem markers for gravity match checking
-            isMatched: false,
-            animationState: 'normal' as const,
-          }))
-        );
-
-        setBoard(gravityCheckBoard);
-
-        // Check for matches after gravity
-        setTimeout(() => {
-          const gravityMatches = findMatches(gravityCheckBoard);
-
-          if (gravityMatches.size > 0) {
-            // Matches found after gravity - continue cascade
-            processStepByCascade(gravityCheckBoard, 'gravity');
-          } else {
-            // No matches after gravity - show new gems with falling animation
-            const boardWithFallingGems = completeBoard.map((row) =>
-              row.map((gem) => ({
-                ...gem,
-                animationState: gem.isNew ? ('falling' as const) : ('normal' as const),
-              }))
-            );
-
-            setBoard(boardWithFallingGems);
-
-            // Start falling animation for new gems
-            const newGemPositions = completeBoard.flatMap((row, rowIndex) =>
-              row
-                .map((gem, colIndex) => (gem.isNew ? { row: rowIndex, col: colIndex } : null))
-                .filter((pos) => pos !== null)
-            ) as Array<{ row: number; col: number }>;
-
-            if (newGemPositions.length > 0) {
-              animationManager.startGravityAnimation(newGemPositions, () => {
-                // After falling animation, reset animation states and check for matches
-                const finalBoard = completeBoard.map((row) =>
-                  row.map((gem) => ({
-                    ...gem,
-                    isNew: false,
-                    isMatched: false,
-                    animationState: 'normal' as const,
-                  }))
-                );
-
-                setBoard(finalBoard);
-
-                // Check for matches from new gems
-                setTimeout(() => {
-                  const newGemMatches = findMatches(finalBoard);
-
-                  if (newGemMatches.size > 0) {
-                    // Matches found from new gems - continue cascade
-                    processStepByCascade(finalBoard, 'newGems');
-                  } else {
-                    // No more matches - cascade complete
-                    console.log('✅ Cascade complete - no more matches');
-                    setIsProcessingCascade(false);
-                  }
-                }, 100);
-              });
-            } else {
-              // No new gems - cascade complete
-              console.log('✅ Cascade complete - no new gems needed');
-              setIsProcessingCascade(false);
-            }
-          }
-        }, 100);
-      });
-    } else {
-      // No matches - cascade complete
-      console.log('✅ Cascade complete - no matches found');
+    
+    // Validate prerequisites before starting cascade
+    if (!validateCascadePrerequisites(currentBoard, step)) {
+      console.error('❌ Cascade prerequisites not met - aborting');
       setIsProcessingCascade(false);
+      return;
     }
+    
+    // Start the cascade using the new modular system
+    startCascade(
+      currentBoard,
+      step,
+      setBoard,
+      setIsProcessingCascade,
+      config
+    );
   };
 
   // Post-swap consequence logic - runs whenever board changes
@@ -187,8 +102,9 @@ const Game = () => {
     console.log('🔍 Initial matches found:', matches.size > 0 ? Array.from(matches) : 'None');
 
     if (matches.size > 0) {
+      console.log('🚀 Matches detected - starting cascade system');
       setIsProcessingCascade(true);
-      processStepByCascade(board, 'initial');
+      initiateCascade(board, 'initial');
     }
   }, [board, isProcessingCascade]);
 
@@ -327,4 +243,4 @@ const Game = () => {
   );
 };
 
-export default Game;
+export default BlitzGame;
